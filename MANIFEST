@@ -1,4 +1,5 @@
 Changes
+COPYRIGHT
 HACKING
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
@@ -33,4 +34,5 @@ README
 t/01basic.t
 t/02trytiny.t
 t/03listscalar.t
+t/04listutil.t
 SIGNATURE                                Public-key signature (added by MakeMaker)

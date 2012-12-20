@@ -6,19 +6,18 @@ use warnings;
 
 BEGIN {
 	$return::thence::AUTHORITY = 'cpan:TOBYINK';
-	$return::thence::VERSION   = '0.001';
+	$return::thence::VERSION   = '0.002';
 }
 
-use Scope::Upper qw( unwind SUB UP );
+use Scope::Upper qw( unwind CALLER );
 
 sub return::thence
 {
 	my @caller = caller(my $i = 0);
-	my $ctx = SUB UP;
+	my $ctx = CALLER(0);
 	while (my @level = caller(++$i)) {
 		next if $level[1] ne $caller[1];  # filename
-		last if $level[3] =~ /^$caller[0]\::(\w+)$/ && $1 ne '__ANON__';
-		$ctx = SUB UP $ctx;
+		last if $level[3] =~ /^$caller[0]\::(\w+)$/ && $1 ne '__ANON__' && ($ctx = CALLER $i);
 	}
 	unwind @_ => $ctx;
 }
@@ -71,6 +70,8 @@ under the hood.
 
 =head1 BUGS
 
+Skipping over XS stack frames can cause segfaults.
+
 Please report any bugs to
 L<http://rt.cpan.org/Dist/Display.html?Queue=return-thence>.
 
@@ -88,7 +89,6 @@ This software is copyright (c) 2012 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
-
 
 =head1 DISCLAIMER OF WARRANTIES
 
